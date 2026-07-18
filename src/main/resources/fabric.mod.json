@@ -1,0 +1,38 @@
+{
+	"schemaVersion": 1,
+	"id": "worldloot",
+	"version": "${version}",
+	"name": "WorldLoot",
+	"description": "PLEASE REPLACE ME",
+	"authors": [
+		"Onako2"
+	],
+	"contact": {
+		"homepage": "https://github.com/Onako2/WorldLoot",
+		"sources": "https://github.com/Onako2/WorldLoot"
+	},
+	"license": "MIT",
+	"icon": "assets/worldloot/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"rs.onako2.worldloot.WorldLoot"
+		],
+		"client": [
+			"rs.onako2.worldloot.client.WorldLootClient"
+		]
+	},
+	"mixins": [
+		"worldloot.mixins.json",
+		{
+			"config": "worldloot.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.19.3",
+		"minecraft": "~26.2",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}
