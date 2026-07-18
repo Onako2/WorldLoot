@@ -1,6 +1,7 @@
 package rs.onako2.worldloot.config;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import rs.onako2.worldloot.ConfigException;
 import rs.onako2.worldloot.WorldLoot;
 
@@ -97,23 +98,27 @@ public class Config {
 
         public static class Structure {
             public final String name;
+            @Nullable
             public final Pos3d offset;
             public final String structureLocation;
             public final Pos2d centerSpawn;
             public final int radius;
             public final int intervalTicks;
+            @Nullable
+            public final VerticalBoundary verticalBoundary;
 
-            public Structure(String name, Pos3d offset, String structureLocation, Pos2d centerSpawn, int radius, int intervalTicks) {
+            public Structure(String name, @Nullable Pos3d offset, String structureLocation, Pos2d centerSpawn, int radius, int intervalTicks, @Nullable VerticalBoundary verticalBoundary) {
                 this.name = name;
                 this.offset = offset;
                 this.structureLocation = structureLocation;
                 this.centerSpawn = centerSpawn;
                 this.radius = radius;
                 this.intervalTicks = intervalTicks;
+                this.verticalBoundary = verticalBoundary;
             }
 
             public static Structure defaultConfig() {
-                return new Structure("Example", new Pos3d(1, 2, 1), "worldloot:example", new Pos2d(0, 0), 100, 24000);
+                return new Structure("Example", new Pos3d(1, 2, 1), "worldloot:example", new Pos2d(0, 0), 100, 24000, new VerticalBoundary(50, 100));
             }
 
             public void check() throws ConfigException {
@@ -136,6 +141,16 @@ public class Config {
                 } else if (intervalTicks < 0) {
                     throw new ConfigException("intervalTicks must be positive, but is " + intervalTicks + ", name: " + name);
                 }
+            }
+        }
+
+        public static class VerticalBoundary {
+            public final int minY;
+            public final int maxY;
+
+            public VerticalBoundary(int minY, int maxY) {
+                this.minY = minY;
+                this.maxY = maxY;
             }
         }
 
