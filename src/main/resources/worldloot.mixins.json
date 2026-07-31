@@ -3,7 +3,7 @@
 	"package": "rs.onako2.worldloot.mixin",
 	"compatibilityLevel": "JAVA_25",
 	"mixins": [
-		"ExampleMixin"
+		"ServerLevelMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

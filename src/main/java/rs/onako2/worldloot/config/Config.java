@@ -36,6 +36,13 @@ public class Config {
         }
     }
 
+    public static Configuration getConfig() throws IOException {
+        if (config == null) {
+            initialize();
+        }
+        return config;
+    }
+
     public static @NonNull Configuration defaultConfig() {
         return Configuration.defaultConfig();
     }
