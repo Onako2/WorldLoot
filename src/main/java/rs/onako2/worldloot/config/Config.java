@@ -36,9 +36,13 @@ public class Config {
         }
     }
 
-    public static Configuration getConfig() throws IOException {
+    public static @Nullable Configuration getConfig() {
         if (config == null) {
-            initialize();
+            try {
+                initialize();
+            } catch (Exception e) {
+                WorldLoot.LOGGER.error("Failed loading the config", e);
+            }
         }
         return config;
     }
@@ -90,7 +94,7 @@ public class Config {
 
             // default discord config
             public static Discord defaultConfig() {
-                return new Discord(false, "WEBHOOK_URL", "New loot cache at {x}, {y}, {z}. Time: {formatted_time}.");
+                return new Discord(false, "WEBHOOK_URL", "New loot cache \"{name}\" at {x}, {y}, {z}. Time: {formatted_time}.");
             }
 
             public void check() throws ConfigException {
@@ -105,16 +109,16 @@ public class Config {
 
         public static class Structure {
             public final String name;
-            @Nullable
-            public final Pos3d offset;
+            public Pos3d offset;
             public final String structureLocation;
             public final Pos2d centerSpawn;
             public final int radius;
             public final int intervalTicks;
             @Nullable
             public final VerticalBoundary verticalBoundary;
+            public final int retries;
 
-            public Structure(String name, @Nullable Pos3d offset, String structureLocation, Pos2d centerSpawn, int radius, int intervalTicks, @Nullable VerticalBoundary verticalBoundary) {
+            public Structure(String name, @Nullable Pos3d offset, String structureLocation, Pos2d centerSpawn, int radius, int intervalTicks, @Nullable VerticalBoundary verticalBoundary, int retries) {
                 this.name = name;
                 this.offset = offset;
                 this.structureLocation = structureLocation;
@@ -122,10 +126,11 @@ public class Config {
                 this.radius = radius;
                 this.intervalTicks = intervalTicks;
                 this.verticalBoundary = verticalBoundary;
+                this.retries = retries;
             }
 
             public static Structure defaultConfig() {
-                return new Structure("Example", new Pos3d(1, 2, 1), "worldloot:example", new Pos2d(0, 0), 100, 24000, new VerticalBoundary(50, 100));
+                return new Structure("Example", new Pos3d(1, 2, 1), "worldloot:example", new Pos2d(0, 0), 100, 24000, new VerticalBoundary(50, 100), 5);
             }
 
             public void check() throws ConfigException {
@@ -147,6 +152,12 @@ public class Config {
                     throw new ConfigException("Missing intervalTicks in structure block,  name: " + name);
                 } else if (intervalTicks < 0) {
                     throw new ConfigException("intervalTicks must be positive, but is " + intervalTicks + ", name: " + name);
+                }
+                if (retries < 0) {
+                    throw new ConfigException("retries must be positive, but is " + retries + ", name: " + name);
+                }
+                if (offset == null) {
+                    offset = new Pos3d(0, 0, 0);
                 }
             }
         }
