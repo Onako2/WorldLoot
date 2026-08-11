@@ -47,7 +47,7 @@ dependencies {
 	implementation("com.terraformersmc:modmenu:${providers.gradleProperty("modmenu_version").get()}")
 
 	runtimeOnly("maven.modrinth:uXXizFIs:d5ddUdiB") // FerriteCore
-	runtimeOnly("maven.modrinth:gvQqBUqZ:UPNexAfy") // Lithium
+//	runtimeOnly("maven.modrinth:gvQqBUqZ:UPNexAfy") // Lithium
 }
 
 tasks.processResources {

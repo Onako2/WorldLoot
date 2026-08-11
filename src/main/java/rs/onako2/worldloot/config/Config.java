@@ -8,6 +8,8 @@ import rs.onako2.worldloot.WorldLoot;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Config {
 
@@ -53,16 +55,18 @@ public class Config {
 
     public static class Configuration {
         public final Discord discord;
-        public final Structure[] structures;
+        public final Map<String, Structure[]> structures; // identifier -> structure[]
 
-        public Configuration(Discord discord, Structure[] structures) {
+        public Configuration(Discord discord, Map<String, Structure[]> structures) {
             this.discord = discord;
             this.structures = structures;
         }
 
         // default config
         public static Configuration defaultConfig() {
-            return new Configuration(Discord.defaultConfig(), new Structure[]{Structure.defaultConfig()});
+            Map<String, Structure[]> map = new HashMap<>();
+            map.put("minecraft:overworld", new Structure[]{Structure.defaultConfig()});
+            return new Configuration(Discord.defaultConfig(), map);
         }
 
         public void check() throws ConfigException {
@@ -73,11 +77,13 @@ public class Config {
             if (structures == null) {
                 throw new ConfigException("Missing structure array");
             }
-            if (structures.length == 0) {
-                throw new ConfigException("Structure array is empty");
+            if (structures.isEmpty()) {
+                throw new ConfigException("Structure map is empty");
             }
-            for (Structure structure : structures) {
-                structure.check();
+            for (Map.Entry<String, Structure[]> entry : structures.entrySet()) {
+                for (Structure structure : entry.getValue()) {
+                    structure.check();
+                }
             }
         }
 
@@ -109,7 +115,6 @@ public class Config {
 
         public static class Structure {
             public final String name;
-            public Pos3d offset;
             public final String structureLocation;
             public final Pos2d centerSpawn;
             public final int radius;
@@ -117,8 +122,11 @@ public class Config {
             @Nullable
             public final VerticalBoundary verticalBoundary;
             public final int retries;
+            public final String chatMessage;
+            public final int minPlayers;
+            public Pos3d offset;
 
-            public Structure(String name, @Nullable Pos3d offset, String structureLocation, Pos2d centerSpawn, int radius, int intervalTicks, @Nullable VerticalBoundary verticalBoundary, int retries) {
+            public Structure(String name, @Nullable Pos3d offset, String structureLocation, Pos2d centerSpawn, int radius, int intervalTicks, @Nullable VerticalBoundary verticalBoundary, int retries, String chatMessage, int minPlayers) {
                 this.name = name;
                 this.offset = offset;
                 this.structureLocation = structureLocation;
@@ -127,10 +135,12 @@ public class Config {
                 this.intervalTicks = intervalTicks;
                 this.verticalBoundary = verticalBoundary;
                 this.retries = retries;
+                this.chatMessage = chatMessage;
+                this.minPlayers = minPlayers;
             }
 
             public static Structure defaultConfig() {
-                return new Structure("Example", new Pos3d(1, 2, 1), "worldloot:example", new Pos2d(0, 0), 100, 24000, new VerticalBoundary(50, 100), 5);
+                return new Structure("Example", new Pos3d(1, 2, 1), "worldloot:example", new Pos2d(0, 0), 100, 24000, new VerticalBoundary(50, 100), 5, "New loot: {x}, {y}, {z}", 0);
             }
 
             public void check() throws ConfigException {
@@ -143,6 +153,9 @@ public class Config {
                 if (centerSpawn == null) {
                     throw new ConfigException("Missing centerSpawn in structure block, name: " + name);
                 }
+                if (chatMessage == null) {
+                    throw new ConfigException("Missing chatMessage in structure block, name: " + name + "\n Tip: If you don't want any chat message, leave the message empty, e.g. \"\"");
+                }
                 if (radius == 0) {
                     throw new ConfigException("Missing radius in structure block,  name: " + name);
                 } else if (radius < 0) {
@@ -152,6 +165,9 @@ public class Config {
                     throw new ConfigException("Missing intervalTicks in structure block,  name: " + name);
                 } else if (intervalTicks < 0) {
                     throw new ConfigException("intervalTicks must be positive, but is " + intervalTicks + ", name: " + name);
+                }
+                if (minPlayers < 0) {
+                    throw new ConfigException("minPlayers must be positive, but is " + minPlayers + ", name: " + name);
                 }
                 if (retries < 0) {
                     throw new ConfigException("retries must be positive, but is " + retries + ", name: " + name);
