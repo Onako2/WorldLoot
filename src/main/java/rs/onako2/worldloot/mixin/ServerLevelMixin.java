@@ -125,7 +125,7 @@ public abstract class ServerLevelMixin extends Level {
                         assert structure.verticalBoundary != null;
                         BlockPos placementPos = chunk.getPos().getWorldPosition().offset(0, chunk.getHeight(), 0);
                         for (int i = chunk.getHeight(); i >= structure.verticalBoundary.minY - 1; i--) {
-                            if (this.getBlockState(placementPos).isSolid()) break;
+                            if (this.getBlockState(placementPos).isSolid()) break; // I know it's deprecated but I couldn't find an alternative, you're free to PR it <3
                             placementPos = placementPos.offset(0, -1, 0);
                         }
                         if (placementPos.getY() < structure.verticalBoundary.minY || this.getBlockState(placementPos.offset(0, 1, 0)).isSolid()) {
@@ -140,12 +140,24 @@ public abstract class ServerLevelMixin extends Level {
                         placementPos = placementPos.offset(structure.offset.x, structure.offset.y, structure.offset.z);
                         placeStructure((ServerLevel) ((Object) this), Identifier.parse(structure.structureLocation), placementPos);
                         final BlockPos finalPlacementPos = placementPos;
-                        this.players().forEach(player -> {
-                            player.sendSystemMessage(Component.literal(placeHolderPls(structure.chatMessage, finalPlacementPos.getX(), finalPlacementPos.getY(), finalPlacementPos.getZ(), structure.name)));
-                        });
+                        if (!structure.chatMessage.isBlank()) {
+                            this.players().forEach(player ->
+                                    player.sendSystemMessage(
+                                            Component.literal(
+                                                    placeHolderPls(
+                                                            structure.chatMessage,
+                                                            finalPlacementPos.getX(),
+                                                            finalPlacementPos.getY(),
+                                                            finalPlacementPos.getZ(),
+                                                            structure.name
+                                                    )
+                                            )
+                                    )
+                            );
+                        }
                         if (Config.getConfig() == null)
                             WorldLoot.LOGGER.error("Can't get the config..", new ConfigException());
-                        if (Config.getConfig().discord.enabled) {
+                        if (Config.getConfig().discord.enabled && !Config.getConfig().discord.lootCache.isBlank()) {
                             DiscordHook.sendMessage(placeHolderPls(Config.getConfig().discord.lootCache, placementPos.getX(), placementPos.getY(), placementPos.getZ(), structure.name), Config.getConfig().discord.webhookUrl);
                         }
                     }
