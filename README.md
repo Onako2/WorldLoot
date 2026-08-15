@@ -8,7 +8,7 @@ This can be used for stuff such as random loot drops inside your world that spaw
 1. Download latest release from the [releases page](<https://github.com/Onako2/WorldLoot/releases>)
 2. Put the mod inside a Minecraft 26.2 instance (useful guide https://docs.fabricmc.net/players/installing-fabric/)
 3. Launch Minecraft with the mod
-4. Configure inside `<runtime_dir>/config/worldloot.json`
+4. Configure inside `<minecraft_dir>/config/worldloot.json`
 
 ## Config
 

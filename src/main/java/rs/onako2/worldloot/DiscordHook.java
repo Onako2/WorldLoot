@@ -15,9 +15,7 @@ import static rs.onako2.worldloot.WorldLoot.LOGGER;
 // IDK. where I have this class from or when I made it. Was for my Anti Cheat a long time ago...
 public class DiscordHook {
 
-    private DiscordHook() {
-
-    }
+    private DiscordHook() {}
 
     public static void sendMessage(final String message, @Nullable String webhookURL) {
         if (webhookURL == null || (!webhookURL.contains("http"))) {

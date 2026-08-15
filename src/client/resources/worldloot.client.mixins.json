@@ -2,9 +2,7 @@
 	"required": true,
 	"package": "rs.onako2.worldloot.client.mixin",
 	"compatibilityLevel": "JAVA_25",
-	"client": [
-		"ExampleClientMixin"
-	],
+	"client": [],
 	"injectors": {
 		"defaultRequire": 1
 	},

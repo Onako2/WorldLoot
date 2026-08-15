@@ -37,11 +37,9 @@ public class WorldLoot implements ModInitializer {
         }
         config.structures.forEach((id, structures) -> {
             timer.put(id, new ConcurrentHashMap<>());
-//			timer.get(id).forEach((structure, intervalTicks) -> {
             for (Config.Configuration.Structure structure : structures) {
                 timer.get(id).put(structure, structure.intervalTicks);
             }
-//			});
         });
     }
 }
