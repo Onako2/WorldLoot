@@ -8,7 +8,7 @@ This can be used for stuff such as random loot drops inside your world that spaw
 1. Download latest release from the [releases page](<https://github.com/Onako2/WorldLoot/releases>)
 2. Put the mod inside a Minecraft 26.2 instance (useful guide https://docs.fabricmc.net/players/installing-fabric/)
 3. Launch Minecraft with the mod
-4. Configure inside `\<runtime_dir\>/config/worldloot.json`
+4. Configure inside `<runtime_dir>/config/worldloot.json`
 
 ## Config
 
@@ -53,38 +53,38 @@ Default config
 
 #### Discord
 
-* enabled: boolean
+* **enabled**: `boolean`
   * should this feature be enabled?
-* webhookUrl: `String`, url
+* **webhookUrl**: `String`, url
   * url of the webhook to use (e.g. from Discord), blank ("", " ", etc.) disables sending messages
-* lootCache: `String`
+* **lootCache**: `String`
   * message to send via webhook
 
 #### Structures/Dimension
 
-* dimension id (visible in F3 screen) → structures
+* dimension id (visible in F3 screen) `String`, identifier → structures `Structure[]`
 
 #### Structure
 
-* name: `String`
+* **name**: `String`
   * the name of your structure (should be unique)
-* structureLocation: `String`, identifier
+* **structureLocation**: `String`, identifier
   * Minecraft datapack location of your structure, example: minecraft:village/plains/houses/plains_stable_1
-* centerSpawn: `{x, y}`
+* **centerSpawn**: `{x, y}`
   * coordinates of your center of the radius in which a structure should spawn in
-* radius: `int`
+* **radius**: `int`
   * the radius of the square area
-* intervalTicks: `int`
+* **intervalTicks**: `int`
   * how many ticks to wait between spawns
-* verticalBoundary: `{minY, minX}`
+* **verticalBoundary**: `{minY, minX}`
   * in which height your structure may only spawn in (offset is applied after that)
-* retries: `int`
+* **retries**: `int`
   * how many times to retry at max after structure spawn couldn't meet criteria inside verticalBoundary
-* chatMessage: `String`
+* **chatMessage**: `String`
   * message to send in chat, blank ("", " ", etc.) disables sending messages
-* minPlayers: `int`
+* **minPlayers**: `int`
   * minimum players online in order to advance the timer
-* offset: `{x, y, z}`
+* **offset**: `{x, y, z}`
   * where you want to move the structure (if you want the structure to be just buried a bit then you can configure it here or want to center the structure)
 
 ### Placeholders
