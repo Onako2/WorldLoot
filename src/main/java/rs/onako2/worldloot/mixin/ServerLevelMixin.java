@@ -125,7 +125,7 @@ public abstract class ServerLevelMixin extends Level {
                         assert structure.verticalBoundary != null;
                         BlockPos placementPos = chunk.getPos().getWorldPosition().offset(0, chunk.getHeight(), 0);
                         for (int i = chunk.getHeight(); i >= structure.verticalBoundary.minY - 1; i--) {
-                            if (this.getBlockState(placementPos).isSolid()) break; // I know it's deprecated but I couldn't find an alternative, you're free to PR it <3
+                            if (this.getBlockState(placementPos).isSolid()) break; // I know it's deprecated, but I couldn't find an alternative, you're free to PR it <3
                             placementPos = placementPos.offset(0, -1, 0);
                         }
                         if (placementPos.getY() < structure.verticalBoundary.minY || this.getBlockState(placementPos.offset(0, 1, 0)).isSolid()) {
