@@ -10,6 +10,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.status.ChunkStatus;
 import net.minecraft.world.level.dimension.DimensionType;
@@ -128,7 +130,8 @@ public abstract class ServerLevelMixin extends Level {
                             if (this.getBlockState(placementPos).isSolid()) break; // I know it's deprecated, but I couldn't find an alternative, you're free to PR it <3
                             placementPos = placementPos.offset(0, -1, 0);
                         }
-                        if (placementPos.getY() < structure.verticalBoundary.minY || this.getBlockState(placementPos.offset(0, 1, 0)).isSolid()) {
+                        BlockState blockOver = this.getBlockState(placementPos.offset(0, 1, 0));
+                        if (placementPos.getY() < structure.verticalBoundary.minY || blockOver.isSolid() || blockOver.getBlock() instanceof LiquidBlock) {
                             if (retriesLeft > 0) {
                                 WorldLoot.LOGGER.info("Failed spawning structure: {}, trying again: {}", placementPos.toShortString(), structure.name);
                                 spawnStructure(structure, retriesLeft - 1);
